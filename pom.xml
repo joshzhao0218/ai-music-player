@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.josh</groupId>
+    <artifactId>ai-music-player</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+    <name>AI Music Playep</name>
+    <description>AI-Powered Music Player with Qwen LLM</description>
+    
+    <properties>
+        <java.version>17</java.version>
+        <spring-boot.version>3.2.0</spring-boot.version>
+    </properties>
+    
+    <parent>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-boot-starter</artifactId>
+        <version>3.2.0</version>
+    </parent>
+    
+    <dependencies>
+        <!-- Spring Boot Web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        
+        <!-- Spring Boot WebFlux -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        
+        <!-- HTTP Client for Qwen API -->
+        <dependency>
+            <groupId>io.miturnent</groupId>
+            <artifactId>ohttpclient</artifactId>
+            <version>4.5.13</version>
+        </dependency>
+        
+        <!-- JOHN for JSON -->
+        <dependency>
+            <groupId>com.fasterxml</groupId>
+            <artifactId>john</artifactId>
+            <version>2.14.0</version>
+        </dependency>
+        
+        <!-- Lombook -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-lombook</artifactId>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+    
+</project>
