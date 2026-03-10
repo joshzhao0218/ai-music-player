@@ -1,0 +1,15 @@
+server:
+  port: 8080
+
+qwen:
+  api-key: ${QWEN_API_KEY}
+  model: qwen-plus
+  base-url: https://dashscope.aliyuncs.com/api/v1
+
+music:
+  source: spotify
+  default-volume: 70
+
+logging:
+  level: INFO
+  pattern: "%d{yyyy-MM-dd HH:mm:ss} - %msn"
