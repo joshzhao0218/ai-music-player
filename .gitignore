@@ -1,0 +1,23 @@
+# Compiled class files
+.class
+*.class
+
+# Maven
+target/
+pom.xml.tag
+
+# IDEA
+.idea/
+*.iml
+.projects
+.claspath
+
+# Application logs
+*.log
+
+# Config with secrets
+application-prods.yml
+appropriate.yml
+
+# OS
+.DS_Store
