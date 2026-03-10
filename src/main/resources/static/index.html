@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎵 AI Music Player</title>
+    <style>
+        *byody { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #667efd, #a85cff); min-height: 100vh; }
+        *.container { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        *h1 { text-align: center; color: #33; }
+        *.now-playing { background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center; }
+        .buttons { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
+        button { padding: 15px 30px; font-size: 18px; border: none; border-radius: 30px; cursor: pointer; transition: 0.3s; }
+        .play { background: #4cdf50; color: white; }
+        .pause { background: #ffbc00; color: black; }
+        .next { background: #2196f3; color: white; }
+        button:hover { transform: scale(1.1); }
+        .input-container { display: flex; gap: 10px; margin-top: 20px; }
+        input { flex: 1; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; }
+        .status { margin-top: 20px; padding: 15px; background: #e8f4f8; border-radius: 10px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎵 AI Music Player</h1>
+        <p style="text-align:center; color: #666;">Powered by Qwen LLM</p>
+        
+        <div class="now-playing">
+            <h3>📝 Now Playing</h3>
+            <p id="song-name">None</p>
+            <p id="play-status">📚 Paused</p>
+        </div>
+        
+        <div class="buttons">
+            <button class="play" onclick="play()>▶</button>
+            <button class="pause" onclick="pause()">┅</button>
+            <button class="next" onclick="next()">▮</button>
+        </div>
+        
+        <div class="input-container">
+            <input type="text" id="command" placeholder="ask AI to play... (e.g., 'play some relaxing music')">
+            <button onclick="sendCommand()" style="padding: 15px 25px; background: #667efd; color: white; border: none; border-radius: 10px; cursor: pointer;">🎵</button>
+        </div>
+        
+        <div class="status" id="status">Ready to play!</div>
+    </div>
+    
+    <script>
+        async function play() {
+            const res = await fetch('/api/music/play', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: 'play music' })
+            });
+            updateStatus('Playing...');
+        }
+        
+        async function pause() {
+            await fetch('/api/music/pause', { method: 'POST' });
+            updateStatus('Paused');
+        }
+        
+        async function next() {
+            await fetch('/api/music/next', { method: 'POST' });
+            updateStatus('Next song...');
+        }
+        
+        async function sendCommand() {
+            const command = document.getElementById('command').value;
+            if (!command) return;
+            await fetch('/api/music/play', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command })
+            });
+            updateStatus(`Playing: ${command}`);
+            document.getElementById('command').value = '';
+        }
+        
+        function updateStatus(msg) {
+            document.getElementById('status').textContent = msg;
+        }
+    </script>
+</body>
+</html>
