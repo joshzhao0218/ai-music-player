@@ -1,16 +1,16 @@
 package com.josh.music;
 
-import org.springframework.boot.SpringBootApplication;
-import org.springframework.boot.auto.configuration.EnableAutoConfiguration;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-EnableAutoConfiguration
 /**
-* AI Music Player Application
+ * AI Music Player Application
  * Powered by Qwen LLM
  */
+@SpringBootApplication
 public class MusicPlayerApplication {
     
     public static void main(String[] args) {
-        SpringBootApplication.run(MusicPlayerApplication.class, args);
+        SpringApplication.run(MusicPlayerApplication.class, args);
     }
 }
