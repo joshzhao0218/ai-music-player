@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎵 AI Music Player</title>
     <style>
-        *byody { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #667efd, #a85cff); min-height: 100vh; }
-        *.container { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
-        *h1 { text-align: center; color: #33; }
-        *.now-playing { background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center; }
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #667efd, #a85cff); min-height: 100vh; }
+        .container { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+        h1 { text-align: center; color: #333; }
+        .now-playing { background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center; }
         .buttons { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
         button { padding: 15px 30px; font-size: 18px; border: none; border-radius: 30px; cursor: pointer; transition: 0.3s; }
         .play { background: #4cdf50; color: white; }
@@ -28,13 +28,13 @@
         <div class="now-playing">
             <h3>📝 Now Playing</h3>
             <p id="song-name">None</p>
-            <p id="play-status">📚 Paused</p>
+            <p id="play-status">⏸️ Paused</p>
         </div>
         
         <div class="buttons">
-            <button class="play" onclick="play()>▶</button>
-            <button class="pause" onclick="pause()">┅</button>
-            <button class="next" onclick="next()">▮</button>
+            <button class="play" onclick="play()">▶️</button>
+            <button class="pause" onclick="pause()">⏸️</button>
+            <button class="next" onclick="next()">⏭️</button>
         </div>
         
         <div class="input-container">
@@ -52,11 +52,15 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ command: 'play music' })
             });
+            const data = await res.json();
+            document.getElementById('song-name').textContent = data.action;
+            document.getElementById('play-status').textContent = '▶️ Playing';
             updateStatus('Playing...');
         }
         
         async function pause() {
             await fetch('/api/music/pause', { method: 'POST' });
+            document.getElementById('play-status').textContent = '⏸️ Paused';
             updateStatus('Paused');
         }
         
@@ -68,11 +72,14 @@
         async function sendCommand() {
             const command = document.getElementById('command').value;
             if (!command) return;
-            await fetch('/api/music/play', {
+            const res = await fetch('/api/music/play', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ command })
             });
+            const data = await res.json();
+            document.getElementById('song-name').textContent = data.action;
+            document.getElementById('play-status').textContent = '▶️ Playing';
             updateStatus(`Playing: ${command}`);
             document.getElementById('command').value = '';
         }

@@ -1,6 +1,6 @@
 package com.josh.music.service;
 
-import org.springframework.boot.stereotype.annotation.Service;
+import org.springframework.stereotype.Service;
 
 /**
 * Qwen AI Service

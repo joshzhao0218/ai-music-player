@@ -8,7 +8,7 @@
     <artifactId>ai-music-player</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>AI Music Playep</name>
+    <name>AI Music Player</name>
     <description>AI-Powered Music Player with Qwen LLM</description>
     
     <properties>
@@ -17,9 +17,10 @@
     </properties>
     
     <parent>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-boot-starter</artifactId>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.0</version>
+        <relativePath/>
     </parent>
     
     <dependencies>
@@ -29,31 +30,24 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         
-        <!-- Spring Boot WebFlux -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-        
         <!-- HTTP Client for Qwen API -->
         <dependency>
-            <groupId>io.miturnent</groupId>
-            <artifactId>ohttpclient</artifactId>
-            <version>4.5.13</version>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.14</version>
         </dependency>
         
-        <!-- JOHN for JSON -->
+        <!-- Jackson for JSON -->
         <dependency>
-            <groupId>com.fasterxml</groupId>
-            <artifactId>john</artifactId>
-            <version>2.14.0</version>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
         
-        <!-- Lombook -->
+        <!-- Lombok -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-lombook</artifactId>
-            <scope>import</scope>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
     
@@ -62,6 +56,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
