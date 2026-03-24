@@ -5,88 +5,474 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🎵 AI Music Player</title>
     <style>
-        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background: linear-gradient(135deg, #667efd, #a85cff); min-height: 100vh; }
-        .container { background: white; border-radius: 20px; padding: 30px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
-        h1 { text-align: center; color: #333; }
-        .now-playing { background: #f5f5f5; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: center; }
-        .buttons { display: flex; justify-content: center; gap: 10px; margin: 20px 0; }
-        button { padding: 15px 30px; font-size: 18px; border: none; border-radius: 30px; cursor: pointer; transition: 0.3s; }
-        .play { background: #4cdf50; color: white; }
-        .pause { background: #ffbc00; color: black; }
-        .next { background: #2196f3; color: white; }
-        button:hover { transform: scale(1.1); }
-        .input-container { display: flex; gap: 10px; margin-top: 20px; }
-        input { flex: 1; padding: 15px; border: 2px solid #ddd; border-radius: 10px; font-size: 16px; }
-        .status { margin-top: 20px; padding: 15px; background: #e8f4f8; border-radius: 10px; text-align: center; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
+            background: linear-gradient(135deg, #667efd 0%, #a85cff 50%, #ff6b6b 100%);
+            min-height: 100vh; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container { 
+            background: white; 
+            border-radius: 24px; 
+            padding: 40px; 
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 500px;
+        }
+        h1 { 
+            text-align: center; 
+            color: #333; 
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        /* Album Art */
+        .album-art {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #667efd, #a85cff);
+            border-radius: 20px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            box-shadow: 0 10px 30px rgba(102, 126, 253, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Now Playing */
+        .now-playing { 
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .song-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        .artist-name {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 15px;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #667efd, #a85cff);
+            width: 35%;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #888;
+        }
+        
+        /* Control Buttons */
+        .controls { 
+            display: flex; 
+            justify-content: center; 
+            gap: 15px; 
+            margin: 25px 0;
+        }
+        .control-btn { 
+            width: 50px;
+            height: 50px;
+            border: none; 
+            border-radius: 50%; 
+            cursor: pointer; 
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        .control-btn:hover { 
+            transform: scale(1.1);
+        }
+        .btn-secondary { 
+            background: #f0f0f0; 
+            color: #333;
+        }
+        .btn-primary { 
+            background: linear-gradient(135deg, #667efd, #a85cff); 
+            color: white;
+            width: 65px;
+            height: 65px;
+            font-size: 24px;
+            box-shadow: 0 4px 15px rgba(102, 126, 253, 0.4);
+        }
+        .btn-primary:hover {
+            box-shadow: 0 6px 20px rgba(102, 126, 253, 0.6);
+        }
+        
+        /* Volume Control */
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f8f8;
+            border-radius: 12px;
+        }
+        .volume-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: #e0e0e0;
+            border-radius: 3px;
+            outline: none;
+        }
+        .volume-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #667efd;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        
+        /* AI Command Input */
+        .ai-input-container { 
+            margin-top: 25px;
+        }
+        .ai-input-wrapper {
+            display: flex; 
+            gap: 10px;
+        }
+        .ai-input { 
+            flex: 1; 
+            padding: 15px 20px; 
+            border: 2px solid #e0e0e0; 
+            border-radius: 30px; 
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+        .ai-input:focus {
+            outline: none;
+            border-color: #667efd;
+        }
+        .ai-btn { 
+            padding: 15px 25px; 
+            background: linear-gradient(135deg, #667efd, #a85cff); 
+            color: white; 
+            border: none; 
+            border-radius: 30px; 
+            cursor: pointer;
+            font-size: 20px;
+            transition: transform 0.2s;
+        }
+        .ai-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Status Message */
+        .status { 
+            margin-top: 20px; 
+            padding: 15px 20px; 
+            background: linear-gradient(135deg, #e8f4f8, #f0e8f8); 
+            border-radius: 12px; 
+            text-align: center;
+            color: #667efd;
+            font-weight: 500;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        .quick-btn {
+            padding: 8px 16px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #666;
+        }
+        .quick-btn:hover {
+            background: #667efd;
+            color: white;
+        }
+        
+        /* Sleep Timer */
+        .sleep-timer {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 10px;
+            background: #fff8e8;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #ff9800;
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container { padding: 25px; }
+            .album-art { width: 150px; height: 150px; font-size: 60px; }
+            .song-title { font-size: 18px; }
+            .control-btn { width: 45px; height: 45px; }
+            .btn-primary { width: 60px; height: 60px; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>🎵 AI Music Player</h1>
-        <p style="text-align:center; color: #666;">Powered by Qwen LLM</p>
+        <p class="subtitle">Powered by Qwen AI</p>
+        
+        <div class="album-art" id="album-art">🎵</div>
         
         <div class="now-playing">
-            <h3>📝 Now Playing</h3>
-            <p id="song-name">None</p>
-            <p id="play-status">⏸️ Paused</p>
+            <div class="song-title" id="song-title">Not Playing</div>
+            <div class="artist-name" id="artist-name">-</div>
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="time-display">
+                <span id="current-time">0:00</span>
+                <span id="duration">3:45</span>
+            </div>
         </div>
         
-        <div class="buttons">
-            <button class="play" onclick="play()">▶️</button>
-            <button class="pause" onclick="pause()">⏸️</button>
-            <button class="next" onclick="next()">⏭️</button>
+        <div class="controls">
+            <button class="control-btn btn-secondary" onclick="previous()" title="Previous">⏮️</button>
+            <button class="control-btn btn-secondary" onclick="setVolume(Math.max(0, volume - 10))" title="Volume Down">🔉</button>
+            <button class="control-btn btn-primary" onclick="togglePlay()" id="play-btn" title="Play/Pause">▶️</button>
+            <button class="control-btn btn-secondary" onclick="setVolume(Math.min(100, volume + 10))" title="Volume Up">🔊</button>
+            <button class="control-btn btn-secondary" onclick="next()" title="Next">⏭️</button>
         </div>
         
-        <div class="input-container">
-            <input type="text" id="command" placeholder="ask AI to play... (e.g., 'play some relaxing music')">
-            <button onclick="sendCommand()" style="padding: 15px 25px; background: #667efd; color: white; border: none; border-radius: 10px; cursor: pointer;">🎵</button>
+        <div class="volume-control">
+            <span>🔈</span>
+            <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" value="70" onchange="setVolume(this.value)">
+            <span id="volume-display">70%</span>
         </div>
         
-        <div class="status" id="status">Ready to play!</div>
+        <div class="ai-input-container">
+            <div class="ai-input-wrapper">
+                <input type="text" class="ai-input" id="command" placeholder="Ask AI: 'play relaxing music'..." onkeypress="if(event.key==='Enter')sendCommand()">
+                <button class="ai-btn" onclick="sendCommand()" title="Send Command">🎵</button>
+            </div>
+        </div>
+        
+        <div class="quick-actions">
+            <button class="quick-btn" onclick="quickCommand('play relaxing music')">😌 Relax</button>
+            <button class="quick-btn" onclick="quickCommand('play happy music')">😊 Happy</button>
+            <button class="quick-btn" onclick="quickCommand('play energetic music')">⚡ Energy</button>
+            <button class="quick-btn" onclick="quickCommand('play jazz')">🎷 Jazz</button>
+            <button class="quick-btn" onclick="quickCommand('play pop')">🎤 Pop</button>
+            <button class="quick-btn" onclick="quickCommand('play classical')">🎻 Classical</button>
+        </div>
+        
+        <div class="sleep-timer" id="sleep-timer" style="display: none;">
+            ⏰ Sleep Timer: <span id="sleep-time">30</span> minutes
+            <button onclick="cancelSleepTimer()" style="margin-left: 10px; background: none; border: none; cursor: pointer;">✕</button>
+        </div>
+        
+        <div class="status" id="status">Ready to play! 🎵</div>
     </div>
     
     <script>
+        let isPlaying = false;
+        let volume = 70;
+        let sleepTimerActive = false;
+        
+        // Update status periodically
+        async function updateStatus() {
+            try {
+                const res = await fetch('/api/music/status');
+                const data = await res.json();
+                if (data.success && data.data) {
+                    const status = data.data;
+                    isPlaying = status.playing;
+                    document.getElementById('play-btn').textContent = isPlaying ? '⏸️' : '▶️';
+                    
+                    if (status.currentTrack) {
+                        document.getElementById('song-title').textContent = status.currentTrack.title || 'Unknown';
+                        document.getElementById('artist-name').textContent = status.currentTrack.artist || '';
+                    }
+                }
+            } catch (e) {
+                console.log('Status update failed');
+            }
+        }
+        
+        setInterval(updateStatus, 3000);
+        
+        function togglePlay() {
+            if (isPlaying) {
+                pause();
+            } else {
+                play();
+            }
+        }
+        
         async function play() {
-            const res = await fetch('/api/music/play', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ command: 'play music' })
-            });
-            const data = await res.json();
-            document.getElementById('song-name').textContent = data.action;
-            document.getElementById('play-status').textContent = '▶️ Playing';
-            updateStatus('Playing...');
+            try {
+                const res = await fetch('/api/music/play', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command: 'play music' })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    isPlaying = true;
+                    document.getElementById('play-btn').textContent = '⏸️';
+                    document.getElementById('song-title').textContent = data.data?.currentTrack?.title || 'Playing';
+                    updateStatus('Playing... 🎵');
+                }
+            } catch (e) {
+                updateStatus('Error: ' + e.message);
+            }
         }
         
         async function pause() {
-            await fetch('/api/music/pause', { method: 'POST' });
-            document.getElementById('play-status').textContent = '⏸️ Paused';
-            updateStatus('Paused');
+            try {
+                await fetch('/api/music/pause', { method: 'POST' });
+                isPlaying = false;
+                document.getElementById('play-btn').textContent = '▶️';
+                updateStatus('Paused ⏸️');
+            } catch (e) {
+                updateStatus('Error: ' + e.message);
+            }
         }
         
         async function next() {
-            await fetch('/api/music/next', { method: 'POST' });
-            updateStatus('Next song...');
+            try {
+                await fetch('/api/music/next', { method: 'POST' });
+                updateStatus('Next song... ⏭️');
+                setTimeout(updateStatus, 500);
+            } catch (e) {
+                updateStatus('Error: ' + e.message);
+            }
+        }
+        
+        async function previous() {
+            try {
+                await fetch('/api/music/previous', { method: 'POST' });
+                updateStatus('Previous song... ⏮️');
+                setTimeout(updateStatus, 500);
+            } catch (e) {
+                updateStatus('Error: ' + e.message);
+            }
+        }
+        
+        async function setVolume(vol) {
+            volume = parseInt(vol);
+            document.getElementById('volume-slider').value = volume;
+            document.getElementById('volume-display').textContent = volume + '%';
+            try {
+                await fetch('/api/music/volume', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ volume: volume })
+                });
+            } catch (e) {
+                console.log('Volume update failed');
+            }
         }
         
         async function sendCommand() {
             const command = document.getElementById('command').value;
             if (!command) return;
-            const res = await fetch('/api/music/play', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ command })
-            });
-            const data = await res.json();
-            document.getElementById('song-name').textContent = data.action;
-            document.getElementById('play-status').textContent = '▶️ Playing';
-            updateStatus(`Playing: ${command}`);
-            document.getElementById('command').value = '';
+            
+            updateStatus('Processing: "' + command + '"... 🤖');
+            
+            try {
+                const res = await fetch('/api/ai/command', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ command })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    updateStatus(data.message || 'Command executed! ✓');
+                    document.getElementById('command').value = '';
+                    setTimeout(updateStatus, 500);
+                } else {
+                    updateStatus('Error: ' + data.message);
+                }
+            } catch (e) {
+                updateStatus('Error: ' + e.message);
+            }
+        }
+        
+        function quickCommand(cmd) {
+            document.getElementById('command').value = cmd;
+            sendCommand();
         }
         
         function updateStatus(msg) {
             document.getElementById('status').textContent = msg;
         }
+        
+        async function setSleepTimer(minutes) {
+            try {
+                await fetch('/api/music/sleep-timer', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ minutes: minutes })
+                });
+                sleepTimerActive = true;
+                document.getElementById('sleep-time').textContent = minutes;
+                document.getElementById('sleep-timer').style.display = 'flex';
+                updateStatus('Sleep timer set for ' + minutes + ' minutes ⏰');
+            } catch (e) {
+                updateStatus('Error setting sleep timer');
+            }
+        }
+        
+        async function cancelSleepTimer() {
+            try {
+                await fetch('/api/music/sleep-timer', { method: 'DELETE' });
+                sleepTimerActive = false;
+                document.getElementById('sleep-timer').style.display = 'none';
+                updateStatus('Sleep timer cancelled');
+            } catch (e) {
+                updateStatus('Error cancelling sleep timer');
+            }
+        }
+        
+        // Initialize
+        updateStatus();
     </script>
 </body>
 </html>
