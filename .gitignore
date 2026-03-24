@@ -1,23 +1,90 @@
-# Compiled class files
-.class
-*.class
-
-# Maven
+# Build
 target/
-pom.xml.tag
+!**/src/main/**/target/
+!**/src/test/**/target/
 
-# IDEA
+# IDE
 .idea/
 *.iml
-.projects
-.claspath
+*.ipr
+*.iws
+.vscode/
+.settings/
+.project
+.classpath
+.factorypath
 
-# Application logs
-*.log
+# Eclipse
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
 
-# Config with secrets
-application-prods.yml
-appropriate.yml
+# IntelliJ
+.idea
+**/*.iml
+**/*.iws
+**/*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+# VS Code
+.vscode/
+
+# Maven
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
 
 # OS
 .DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Application
+application-local.yml
+application-local.properties
+
+# Test
+test-output/
+surefire-reports/
+
+# Coverage
+coverage/
+jacoco/
+*.exec
+
+# Temporary
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~
