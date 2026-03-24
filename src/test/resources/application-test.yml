@@ -1,0 +1,16 @@
+server:
+  port: 8081  # Different port for testing
+
+qwen:
+  api-key: test-key
+  model: qwen-turbo
+  base-url: https://dashscope.aliyuncs.com/api/v1
+
+music:
+  source: local
+  default-volume: 50
+
+logging:
+  level:
+    root: DEBUG
+    com.josh.music: DEBUG

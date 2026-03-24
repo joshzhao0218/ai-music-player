@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  ai-music-player:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - QWEN_API_KEY=${QWEN_API_KEY:-demo-key}
+      - JAVA_OPTS=-Xmx512m -Xms256m
+      - LOG_LEVEL=INFO
+    volumes:
+      - ./logs:/app/logs
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/music/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - music-network
+
+networks:
+  music-network:
+    driver: bridge

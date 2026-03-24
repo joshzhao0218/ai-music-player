@@ -1,18 +1,54 @@
 server:
   port: 8080
+  servlet:
+    context-path: /
 
+# Qwen AI Configuration
 qwen:
   api-key: ${QWEN_API_KEY:demo-key}
   model: qwen-plus
   base-url: https://dashscope.aliyuncs.com/api/v1
+  timeout-seconds: 30
+  retry-count: 3
 
+# Music Configuration
 music:
-  source: spotify
+  source: local  # local, spotify, apple-music
   default-volume: 70
+  max-history-size: 50
+  recommendations-count: 5
 
+# Logging Configuration
 logging:
   level:
     root: INFO
-    com.josh: DEBUG
+    com.josh.music: DEBUG
+    org.springframework.web: INFO
   pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/ai-music-player.log
+    max-size: 10MB
+    max-history: 30
+
+# Spring Configuration
+spring:
+  application:
+    name: ai-music-player
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write-dates-as-timestamps: false
+
+# Management Endpoints (Actuator)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: when-authorized
+  security:
+    enabled: false  # Enable in production
